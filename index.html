@@ -97,7 +97,7 @@
                 });
                 console.log("Got token:", token);
                 const socket = io(
-                    "https://simple-socket-io-jwt-chat-app.herokuapp.com/",
+                    "https://simple-socket-io-jwt-chat-app.herokuapp.com:3000/",
                     {
                         query: { token },
                     }

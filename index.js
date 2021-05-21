@@ -92,6 +92,6 @@ io.use(function (socket, next) {
 
 server.listen(3000, () => {
     console.log(
-        "Listening on https://simple-socket-io-jwt-chat-app.herokuapp.com/:3000..."
+        "Listening on https://simple-socket-io-jwt-chat-app.herokuapp.com:3000/..."
     );
 });
