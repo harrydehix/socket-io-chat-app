@@ -6,9 +6,6 @@ const fs = require("fs");
 
 const port = process.env.PORT || 3000;
 
-let file = fs.readFileSync(`${__dirname}/index.html`, "utf-8");
-file = file.replace("{PORT}", port);
-
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -21,7 +18,7 @@ const users = [];
 app.use(express.json());
 
 app.get("/", (req, res) => {
-    res.status(200).send(file);
+    res.sendFile(`${__dirname}/index.html`);
 });
 
 app.post("/login", (req, res) => {
