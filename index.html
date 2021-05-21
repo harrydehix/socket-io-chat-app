@@ -96,9 +96,12 @@
                     },
                 });
                 console.log("Got token:", token);
-                const socket = io("http://192.168.2.123:3000", {
-                    query: { token },
-                });
+                const socket = io(
+                    "https://simple-socket-io-jwt-chat-app.herokuapp.com/",
+                    {
+                        query: { token },
+                    }
+                );
 
                 socket.on("connect", () => {
                     console.log("Connected to server!");
