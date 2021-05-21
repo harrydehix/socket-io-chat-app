@@ -6,7 +6,7 @@ const fs = require("fs");
 
 const port = process.env.PORT || 3000;
 
-let file = fs.readFileSync(`${__dirname}/index.js`);
+let file = fs.readFileSync(`${__dirname}/index.js`, "utf-8");
 file = file.replace("{PORT}", port);
 
 const app = express();
