@@ -21,7 +21,7 @@ const users = [];
 app.use(express.json());
 
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/index.html");
+    res.status(200).send(file);
 });
 
 app.post("/login", (req, res) => {
