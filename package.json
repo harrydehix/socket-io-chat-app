@@ -1,0 +1,14 @@
+{
+    "name": "simple-socket-io-chat-app",
+    "version": "0.0.1",
+    "description": "simple socket chat app with authentication using jwt",
+    "scripts": {
+        "start": "node index"
+    },
+    "author": "Henri Hollmann",
+    "dependencies": {
+        "express": "^4.17.1",
+        "jsonwebtoken": "^8.5.1",
+        "socket.io": "^4.1.2"
+    }
+}

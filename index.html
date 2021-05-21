@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Socket.IO chat</title>
+        <style>
+            body {
+                margin: 0;
+                padding-bottom: 3rem;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                    Roboto, Helvetica, Arial, sans-serif;
+            }
+
+            #form {
+                background: rgba(0, 0, 0, 0.15);
+                padding: 0.25rem;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                display: flex;
+                height: 3rem;
+                box-sizing: border-box;
+                backdrop-filter: blur(10px);
+            }
+
+            #input {
+                border: none;
+                padding: 0 1rem;
+                flex-grow: 1;
+                border-radius: 2rem;
+                margin: 0.25rem;
+            }
+
+            #input:focus {
+                outline: none;
+            }
+
+            #form > button {
+                background: #333;
+                border: none;
+                padding: 0 1rem;
+                margin: 0.25rem;
+                border-radius: 3px;
+                outline: none;
+                color: #fff;
+            }
+
+            #messages {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            #messages > li {
+                padding: 0.5rem 1rem;
+            }
+
+            #messages > li:nth-child(odd) {
+                background: #efefef;
+            }
+        </style>
+    </head>
+
+    <body>
+        <ul id="messages"></ul>
+        <form id="form" action="">
+            <input id="input" autocomplete="off" /><button>Send</button>
+        </form>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script>
+            (async () => {
+                var token;
+                var you;
+                const res = await Swal.fire({
+                    title: "Whats your name?",
+                    input: "text",
+                    text: "Enter your name to start chatting...",
+                    icon: "question",
+                    allowOutsideClick: false,
+                    confirmButtonText: "Enter",
+                    inputValidator: async (value) => {
+                        try {
+                            const res = await axios.post("/login", {
+                                username: value,
+                            });
+                            token = res.data.token;
+                            you = value;
+                        } catch (err) {
+                            if (err.response) return err.response.data.message;
+                            return err.message;
+                        }
+                    },
+                });
+                console.log("Got token:", token);
+                const socket = io("http://192.168.2.123:3000", {
+                    query: { token },
+                });
+
+                socket.on("connect", () => {
+                    console.log("Connected to server!");
+                    writeToMessageList(`<i>You joined the chat!<i/>`, true);
+                    socket.on("chat message", function (data) {
+                        writeMessage(data.username, data.msg);
+                    });
+                    socket.on("user joined", function (username) {
+                        writeToMessageList(`<i>${username} joined</i>`, true);
+                    });
+                    socket.on("user left", function (username) {
+                        writeToMessageList(`<i>${username} left</i>`, true);
+                    });
+                });
+
+                const message = {
+                    list: document.getElementById("messages"),
+                    form: document.getElementById("form"),
+                    input: document.getElementById("input"),
+                };
+
+                message.form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    if (message.input.value) {
+                        console.log(socket);
+                        socket.emit("chat message", message.input.value);
+                        writeMessage(`You`, message.input.value);
+                        message.input.value = "";
+                    }
+                });
+
+                function writeToMessageList(content, allowFormatting) {
+                    var item = document.createElement("li");
+                    if (allowFormatting) item.innerHTML = content;
+                    else item.textContent = content;
+                    message.list.appendChild(item);
+                    window.scrollTo(0, document.body.scrollHeight);
+                }
+
+                function writeMessage(from, message) {
+                    writeToMessageList(
+                        `<b>${from}</b>: ${escapeHtml(message)}`,
+                        true
+                    );
+                }
+
+                function escapeHtml(unsafe) {
+                    return unsafe
+                        .replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/"/g, "&quot;")
+                        .replace(/'/g, "&#039;");
+                }
+            })();
+        </script>
+    </body>
+</html>
