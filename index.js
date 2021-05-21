@@ -2,6 +2,12 @@ const express = require("express");
 const { Server } = require("socket.io");
 const http = require("http");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
+
+const port = process.env.PORT || 3000;
+
+const file = fs.readFileSync(`${__dirname}/index.js`);
+file = file.replace("{PORT}", port);
 
 const app = express();
 const server = http.createServer(app);
@@ -90,8 +96,8 @@ io.use(function (socket, next) {
     });
 });
 
-server.listen(3000, () => {
+server.listen(port, () => {
     console.log(
-        "Listening on http://simple-socket-io-jwt-chat-app.herokuapp.com:3000/..."
+        `Listening on http://simple-socket-io-jwt-chat-app.herokuapp.com:${port}/...`
     );
 });
