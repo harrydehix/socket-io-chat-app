@@ -46,7 +46,7 @@
             true
         );
     });
-    socket.on("reconnect", () => {
+    socket.io.on("reconnect", () => {
         writeToMessageList(`<i>You reconnected!</i>`, true);
     });
 
