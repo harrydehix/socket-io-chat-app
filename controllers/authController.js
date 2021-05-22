@@ -23,7 +23,7 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.logout = async (username) => {
-    const tour = await User.findOneAndDelete({ username });
-    if (!tour) console.log(`Failed to logout ${username}`);
+    const user = await User.findOneAndDelete({ username });
+    if (!user) console.log(`Failed to logout ${username}`);
     else console.log(`'${username}' logged out`);
 };
