@@ -42,11 +42,12 @@
 
     socket.on("disconnect", () => {
         writeToMessageList(
-            `<i>You disconnected due to a bad internet connection</i>`
+            `<i>You disconnected due to a bad internet connection</i>`,
+            true
         );
     });
     socket.on("reconnect", () => {
-        writeToMessageList(`<i>You reconnected!</i>`);
+        writeToMessageList(`<i>You reconnected!</i>`, true);
     });
 
     const message = {
