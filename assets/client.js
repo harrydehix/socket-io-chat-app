@@ -40,6 +40,15 @@
         });
     });
 
+    socket.on("disconnect", () => {
+        writeToMessageList(
+            `<i>You disconnected due to a bad internet connection</i>`
+        );
+    });
+    socket.on("reconnect", () => {
+        writeToMessageList(`<i>You reconnected!</i>`);
+    });
+
     const message = {
         list: document.getElementById("messages"),
         form: document.getElementById("form"),
