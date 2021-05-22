@@ -3,12 +3,17 @@
     "version": "0.0.1",
     "description": "simple socket chat app with authentication using jwt",
     "scripts": {
-        "start": "node index"
+        "start": "NODE_ENV=production node server.js",
+        "start:prod": "NODE_ENV=production nodemon server.js",
+        "start:dev": "nodemon server.js"
     },
     "author": "Henri Hollmann",
     "dependencies": {
+        "dotenv": "^10.0.0",
         "express": "^4.17.1",
         "jsonwebtoken": "^8.5.1",
+        "mongoose": "^5.12.10",
+        "morgan": "^1.10.0",
         "socket.io": "^4.1.2"
     }
 }
